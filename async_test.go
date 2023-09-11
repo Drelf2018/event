@@ -1,14 +1,3 @@
-# event
-
-异步事件分发类，可组合后使用。
-
-参数 `handles` 为不定长，事件触发时按照链式顺序逐一调用，可使用 `e.Abort()` 中断。
-
-脱胎于原项目 [event.go](https://github.com/Drelf2018/asyncio/blob/v0.8.0/event.go)
-
-### 使用
-
-```go
 package event_test
 
 import (
@@ -61,22 +50,3 @@ func TestAsyncEvent(t *testing.T) {
 		}
 	}))
 }
-```
-
-#### 控制台
-
-```
-data: 0(int)
-sin: 0(float64)
-Event(__ALL__, 0, map[])
-
-data: 1(int)
-sin: Didn't store the value of sin(data)
-Event(__ALL__, 1, map[])
-
-sin: 0.9092974268256816(float64)
-data: 2(int)
-Event(__ALL__, 2, map[])
-PASS
-ok      github.com/Drelf2018/event      7.049s
-```
