@@ -5,6 +5,7 @@ import (
 
 	"github.com/Drelf2018/TypeGo/Pool"
 	"github.com/Drelf2020/utils"
+	"golang.org/x/exp/maps"
 )
 
 var eventPool = Pool.New(&Event{})
@@ -28,7 +29,7 @@ func (e *Event) Set(x ...any) {
 }
 
 func (e *Event) Reset() {
-	clear(e.env)
+	maps.Clear(e.env)
 	e.aborted = false
 }
 
