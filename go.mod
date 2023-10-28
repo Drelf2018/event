@@ -1,11 +1,11 @@
 module github.com/Drelf2018/event
 
-go 1.21.0
+go 1.18
 
 require (
-	github.com/Drelf2018/TypeGo v0.3.0
-	github.com/Drelf2018/asyncio v0.9.0
-	github.com/Drelf2020/utils v0.5.0
+	github.com/Drelf2018/TypeGo v0.4.3
+	github.com/Drelf2018/asyncio v0.12.0
+	github.com/Drelf2020/utils v0.7.0
 )
 
 require (

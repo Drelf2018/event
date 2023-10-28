@@ -1,9 +1,9 @@
-github.com/Drelf2018/TypeGo v0.3.0 h1:9BMLjEM9FwjiQiyh+q5YuNAdHMOS71EIJY/hrm6dSDE=
-github.com/Drelf2018/TypeGo v0.3.0/go.mod h1:32tPUymfA6OVOFALsVG6vkLG+Top8EA0Q5NtlgjHMgs=
-github.com/Drelf2018/asyncio v0.9.0 h1:l0XyuPfv92qMKJfwcgcTqiQBTR8c+Y4lzfytN9QjO6U=
-github.com/Drelf2018/asyncio v0.9.0/go.mod h1:1WIrZc6u1dDMOQPgDJJg3dMYLmiJodBLK1VAfd7lvRo=
-github.com/Drelf2020/utils v0.5.0 h1:ZvLFcvOV3ooaMQE3DM3CPFwoW++OoJ+kevIudXQOHYc=
-github.com/Drelf2020/utils v0.5.0/go.mod h1:UTfCL3KOyskqX1xGoqdph2f4BaoCRPjJUSA7kS0ywE0=
+github.com/Drelf2018/TypeGo v0.4.3 h1:iymZmdwancYVcs+9PNtT8mqglaWT8fBXJ9c8jcNrPLY=
+github.com/Drelf2018/TypeGo v0.4.3/go.mod h1:hpA8NTaInfI25zNS0P4irE4Hk+kuHFmVPJxco7NhaPM=
+github.com/Drelf2018/asyncio v0.12.0 h1:jT+gZDLN7K8Gev7ycU4H9AtIkDZ7E3mkwLwVcfM0txM=
+github.com/Drelf2018/asyncio v0.12.0/go.mod h1:hzm9S+SsVPlFHf+ueJAGwrXnLGKzP8y5vYnBWh3WiF8=
+github.com/Drelf2020/utils v0.7.0 h1:bSapT0t5IoNyWpa83+fTpiROfp88AAenyPvAaP/Wo/0=
+github.com/Drelf2020/utils v0.7.0/go.mod h1:2D1aCXWdQ1ybsm97a95MQB9oUyrI3s55CV0Ji4xYZ8c=
 github.com/antonfisher/nested-logrus-formatter v1.3.1 h1:NFJIr+pzwv5QLHTPyKz9UMEoHck02Q9L0FP13b/xSbQ=
 github.com/antonfisher/nested-logrus-formatter v1.3.1/go.mod h1:6WTfyWFkBc9+zyBaKIqRrg/KwMqBbodBjgbHjDz7zjA=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
