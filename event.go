@@ -23,7 +23,7 @@ func (e *Event) New() {
 }
 
 func (e *Event) Set(x ...any) {
-	e.cmd = fmt.Sprintf("%v", x[0])
+	e.cmd = fmt.Sprint(x...)
 }
 
 func (e *Event) Reset() {

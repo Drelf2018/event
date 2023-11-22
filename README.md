@@ -12,34 +12,30 @@
 package event_test
 
 import (
-	"fmt"
+	"errors"
+	"strconv"
 	"testing"
 
 	"github.com/Drelf2018/event"
 )
 
 func TestAsyncEvent(t *testing.T) {
-	a := event.Default[int]()
+	evt := event.Default[int]()
 
-	a.OnCommand("av1", func(e *event.Event, v ...int) {
-		fmt.Printf("OnCommand: %v (%T)\n", v, v)
+	evt.OnEqual("id1", func(e *event.Event, v ...int) {
+		t.Logf("OnEqual:  %v\n", v)
 		e.Abort()
 	}, func(e *event.Event, v ...int) {
-		panic(fmt.Errorf("this error will not panic"))
+		panic(errors.New("this error will not panic"))
 	})
 
-	a.OnRegexp(`av\d+`, func(e *event.Event, v ...int) {
-		fmt.Printf("OnRegexp:  %v (%T)\n", v, v)
+	evt.OnRegexp(`id\d+`, func(e *event.Event, v ...int) {
+		t.Logf("OnRegexp: %v\n", v)
 	})
 
-	a.OnAll(func(e *event.Event, v ...any) {
-		fmt.Printf("OnAll:     %v (%T)\n", v, v)
-	})
-
-	a.Dispatch("TestOnAll", "text")
 	event.Heartbeat(2, 1, func(e *event.Event, i int) {
-		fmt.Printf("\nHeartbeat#%v\n", i)
-		a.Dispatch(fmt.Sprintf("av%v", i), i<<i)
+		t.Logf("Heartbeat#%v\n", i)
+		evt.Dispatch("id"+strconv.Itoa(i), i<<i, 2*i+1)
 		if i == 2 {
 			e.Abort()
 		}
@@ -50,18 +46,15 @@ func TestAsyncEvent(t *testing.T) {
 #### 控制台
 
 ```
-OnAll:     [text] ([]interface {})
-
-Heartbeat#0
-OnAll:     [0] ([]interface {})
-OnRegexp:  [0] ([]int)
-
-Heartbeat#1
-OnRegexp:  [2] ([]int)
-OnCommand: [2] ([]int)
-OnAll:     [2] ([]interface {})
-
-Heartbeat#2
-OnAll:     [8] ([]interface {})
-OnRegexp:  [8] ([]int)
+=== RUN   TestAsyncEvent
+    async_test.go:26: Heartbeat#0
+    async_test.go:22: OnRegexp: [0 1]
+    async_test.go:26: Heartbeat#1
+    async_test.go:15: OnEqual:  [2 3]
+    async_test.go:22: OnRegexp: [2 3]
+    async_test.go:26: Heartbeat#2
+    async_test.go:22: OnRegexp: [8 5]
+--- PASS: TestAsyncEvent (4.02s)
+PASS
+ok      github.com/Drelf2018/event      4.047s
 ```

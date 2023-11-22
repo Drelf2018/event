@@ -1,20 +1,17 @@
 package event
 
 import (
-	"errors"
+	"fmt"
 
 	"github.com/Drelf2018/asyncio"
 )
 
 const (
-	COMMAND string = "command"
-	REGEXP  string = "regexp"
-	ALL     string = "__all__"
+	EQUAL  string = "equal"
+	REGEXP string = "regexp"
 )
 
-var ErrNoRule = errors.New("no rule")
-
-type rule[K comparable] interface {
+type Rule[K comparable] interface {
 	Add(cmd K, handles any) (int, error)
 	Del(cmd K, index int)
 	Emit(cmd K, data ...any)
@@ -23,19 +20,19 @@ type rule[K comparable] interface {
 type handle[V any] func(e *Event, v ...V)
 
 type AsyncEvent[K comparable, V any] struct {
-	rules map[string]rule[K]
+	rules map[string]Rule[K]
 }
 
-func (a *AsyncEvent[K, V]) Register(name string, rule rule[K]) *AsyncEvent[K, V] {
+func (a *AsyncEvent[K, V]) Register(name string, rule Rule[K]) *AsyncEvent[K, V] {
 	a.rules[name] = rule
 	return a
 }
 
-func (a *AsyncEvent[K, V]) Rule(name string) rule[K] {
+func (a *AsyncEvent[K, V]) Rule(name string) Rule[K] {
 	if r, ok := a.rules[name]; ok {
 		return r
 	}
-	panic(ErrNoRule)
+	panic(fmt.Errorf("rule \"%v\" not found", name))
 }
 
 func (a *AsyncEvent[K, V]) Add(name string, cmd K, handles ...any) (int, error) {
@@ -46,25 +43,24 @@ func (a *AsyncEvent[K, V]) On(name string, cmd K, handles ...handle[V]) (int, er
 	return a.Rule(name).Add(cmd, handles)
 }
 
-func (a *AsyncEvent[K, V]) OnAll(handles ...handle[any]) (int, error) {
-	var zero K
-	return a.Rule(ALL).Add(zero, handles)
-}
-
-func (a *AsyncEvent[K, V]) OnCommand(cmd K, handles ...handle[V]) (int, error) {
-	return a.On(COMMAND, cmd, handles...)
+func (a *AsyncEvent[K, V]) OnEqual(cmd K, handles ...handle[V]) (int, error) {
+	return a.On(EQUAL, cmd, handles...)
 }
 
 func (a *AsyncEvent[K, V]) Dispatch(cmd K, data ...any) {
-	asyncio.Map(a.rules, func(_ string, r rule[K]) { r.Emit(cmd, data...) })
+	asyncio.WaitGroup(len(a.rules), func(done func()) {
+		for k := range a.rules {
+			go func(k string) {
+				defer done()
+				a.rules[k].Emit(cmd, data...)
+			}(k)
+		}
+	})
 }
 
 func New[K comparable, V any]() AsyncEvent[K, V] {
 	return AsyncEvent[K, V]{
-		rules: map[string]rule[K]{
-			COMMAND: make(Command[K, V]),
-			ALL:     new(All[K]),
-		},
+		rules: map[string]Rule[K]{EQUAL: make(Equal[K, V])},
 	}
 }
 
@@ -78,6 +74,6 @@ func (a *AsyncEventS[V]) OnRegexp(pattern string, handles ...handle[V]) (int, er
 
 func Default[V any]() (a AsyncEventS[V]) {
 	a.AsyncEvent = New[string, V]()
-	a.Register(REGEXP, Regexp[V]{make(Command[string, V])})
+	a.Register(REGEXP, NewRegexp[V]())
 	return
 }
